@@ -1,6 +1,6 @@
-# f(x) protocol contracts
+# CINA protocol contracts
 
-This repo contains smart contracts for f(x) protocol v2.
+This repo contains smart contracts for CINA protocol v2.
 
 ## Tests
 
