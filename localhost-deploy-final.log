@@ -1,0 +1,81 @@
+Deploying contracts with account: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+Account balance: 10000.0 ETH
+
+=== Deploying ProxyAdmin ===
+Using existing Fx ProxyAdmin at: 0x9B54B7703551D9d0ced177A78367560a8B2eDDA4
+Deploying custom ProxyAdmin (will transfer ownership after)
+Custom ProxyAdmin deployed to: 0x33137047cB5962C06803748Af324bDB7118B0Dc8
+Ownership transferred to: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+Using existing EmptyContract at: 0x387568e1ea4Ff4D003B8147739dB69D87325E206
+
+=== Deploying TokenConverter ===
+MultiPathConverter deployed to: 0x2d493cde51adc74D4494b3dC146759cF32957A23
+
+=== Deploying Proxies ===
+PoolManagerProxy deployed to: 0x66713e76897CdC363dF358C853df5eE5831c3E5a
+PegKeeperProxy deployed to: 0xA157711624f837865F0a3b503dD6864E7eD36759
+FxUSDBasePoolProxy deployed to: 0x6384D5F8999EaAC8bcCfae137D4e535075b47494
+Using existing FxUSDProxy at: 0x085780639CC2cACd35E474e71f4d000e2405d8f6
+
+=== Deploying ReservePool and RevenuePool ===
+ReservePool deployed to: 0xc66DEdC010e09BAE8fa355b60f08a0fC8089DF2c
+RevenuePool deployed to: 0x7fAB7AEAB965240986e42729210Cf6E9Fdf26A5f
+
+=== Deploying PoolManager Implementation ===
+PoolManager Implementation deployed to: 0x7b506952142c6B85ca370d79e0094DCD29C0b6a7
+
+=== Initializing PoolManager ===
+PoolManager initialized
+
+=== Deploying FxUSDBasePool Implementation ===
+FxUSDBasePool Implementation deployed to: 0x47A643C1f3c78F87Bf72Ca8787dD09Ee4F2C538D
+
+=== Initializing FxUSDBasePool ===
+FxUSDBasePool initialized
+
+=== Deploying PegKeeper Implementation ===
+PegKeeper Implementation deployed to: 0x631Cc89BAb95812b5FBdfD65A039a103210105b5
+
+=== Initializing PegKeeper ===
+PegKeeper initialized
+
+=== Deploying FxUSD Implementation ===
+FxUSD Implementation deployed to: 0x23b9efEC6328249538614171626feAf27031791b
+
+=== Deploying FxUSDBasePool Gauge ===
+FxUSDBasePool Gauge Proxy deployed to: 0x3907e0Ebb70c4e556a9DFAC210ACE0B7b6c9c3c4
+
+=== Deploying GaugeRewarder ===
+GaugeRewarder deployed to: 0x4cDA739ae3b19347ADa57990eE6d0eb53A547600
+
+=== Configuring PoolManager Parameters ===
+Expense ratios updated
+Redeem fee ratio updated
+
+=== Configuring Gauge Rewards ===
+REWARD_MANAGER_ROLE granted
+wstETH reward token registered
+FXN reward token registered
+
+=== Changing Proxy Admin ===
+PoolManager proxy admin changed
+FxUSDBasePool proxy admin changed
+PegKeeper proxy admin changed
+
+=== Deployment Complete ===
+
+Deployed Addresses:
+--------------------
+CustomProxyAdmin: 0x33137047cB5962C06803748Af324bDB7118B0Dc8
+MultiPathConverter: 0x2d493cde51adc74D4494b3dC146759cF32957A23
+PoolManagerProxy: 0x66713e76897CdC363dF358C853df5eE5831c3E5a
+PoolManagerImplementation: 0x7b506952142c6B85ca370d79e0094DCD29C0b6a7
+PegKeeperProxy: 0xA157711624f837865F0a3b503dD6864E7eD36759
+PegKeeperImplementation: 0x631Cc89BAb95812b5FBdfD65A039a103210105b5
+FxUSDBasePoolProxy: 0x6384D5F8999EaAC8bcCfae137D4e535075b47494
+FxUSDBasePoolImplementation: 0x47A643C1f3c78F87Bf72Ca8787dD09Ee4F2C538D
+FxUSDImplementation: 0x23b9efEC6328249538614171626feAf27031791b
+FxUSDBasePoolGaugeProxy: 0x3907e0Ebb70c4e556a9DFAC210ACE0B7b6c9c3c4
+ReservePool: 0xc66DEdC010e09BAE8fa355b60f08a0fC8089DF2c
+RevenuePool: 0x7fAB7AEAB965240986e42729210Cf6E9Fdf26A5f
+GaugeRewarder: 0x4cDA739ae3b19347ADa57990eE6d0eb53A547600

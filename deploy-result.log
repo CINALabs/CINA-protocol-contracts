@@ -1,0 +1,18 @@
+Deploying contracts with account: 0xE8055E0fAb02Ceb32D30DA3540Cf97BE1FBf244A
+Account balance: 10000000000000.0 ETH
+
+=== Deploying ProxyAdmin ===
+Using existing Fx ProxyAdmin at: 0x9B54B7703551D9d0ced177A78367560a8B2eDDA4
+Deploying custom ProxyAdmin with owner: 0xE8055E0fAb02Ceb32D30DA3540Cf97BE1FBf244A
+TypeError: invalid overrides parameter (argument="overrides", value="0xE8055E0fAb02Ceb32D30DA3540Cf97BE1FBf244A", code=INVALID_ARGUMENT, version=6.13.3)
+    at makeError (/Volumes/PSSD/CINA-protocol-contracts/node_modules/ethers/src.ts/utils/errors.ts:687:21)
+    at assert (/Volumes/PSSD/CINA-protocol-contracts/node_modules/ethers/src.ts/utils/errors.ts:715:25)
+    at assertArgument (/Volumes/PSSD/CINA-protocol-contracts/node_modules/ethers/src.ts/utils/errors.ts:727:5)
+    at copyOverrides (/Volumes/PSSD/CINA-protocol-contracts/node_modules/ethers/src.ts/contract/contract.ts:146:19)
+    at ContractFactory.getDeployTransaction (/Volumes/PSSD/CINA-protocol-contracts/node_modules/ethers/src.ts/contract/factory.ts:83:44)
+    at main (/Volumes/PSSD/CINA-protocol-contracts/deploy-fork.ts:27:45) {
+  code: 'INVALID_ARGUMENT',
+  argument: 'overrides',
+  value: '0xE8055E0fAb02Ceb32D30DA3540Cf97BE1FBf244A',
+  shortMessage: 'invalid overrides parameter'
+}

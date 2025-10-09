@@ -1,0 +1,3 @@
+Error HH110: Invalid JSON-RPC response received: {"errors":[{"value":"hardhat_metadata","msg":"Method not allowed","param":"method","location":"body"}]}
+
+For more info go to https://hardhat.org/HH110 or run Hardhat with --show-stack-traces

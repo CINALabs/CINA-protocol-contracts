@@ -1,0 +1,12 @@
+Deploying contracts with account: 0xE8055E0fAb02Ceb32D30DA3540Cf97BE1FBf244A
+Account balance: 0.0 ETH
+
+=== Deploying ProxyAdmin ===
+Using existing Fx ProxyAdmin at: 0x9B54B7703551D9d0ced177A78367560a8B2eDDA4
+Deploying custom ProxyAdmin (will transfer ownership after)
+ProviderError: Insufficient funds for gas * price + value
+    at HttpProvider.request (/Volumes/PSSD/CINA-protocol-contracts/node_modules/hardhat/src/internal/core/providers/http.ts:107:21)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async HardhatEthersSigner.sendTransaction (/Volumes/PSSD/CINA-protocol-contracts/node_modules/@nomicfoundation/hardhat-ethers/src/signers.ts:125:18)
+    at async ContractFactory.deploy (/Volumes/PSSD/CINA-protocol-contracts/node_modules/ethers/src.ts/contract/factory.ts:111:24)
+    at async main (/Volumes/PSSD/CINA-protocol-contracts/deploy-fork.ts:27:28)

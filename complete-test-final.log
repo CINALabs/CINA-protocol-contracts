@@ -1,0 +1,11 @@
+=== Complete Position Opening Test ===
+
+Deployer: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+Balance: 9999.993386382824151541 ETH
+
+=== Step 1: Deploy PoolConfiguration ===
+Error: incorrect number of arguments to constructor
+    at ContractFactory.getDeployTransaction (/Volumes/PSSD/CINA-protocol-contracts/node_modules/ethers/src.ts/contract/factory.ts:87:19)
+    at ContractFactory.deploy (/Volumes/PSSD/CINA-protocol-contracts/node_modules/ethers/src.ts/contract/factory.ts:105:31)
+    at main (/Volumes/PSSD/CINA-protocol-contracts/deploy-and-test-position.ts:23:50)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)

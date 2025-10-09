@@ -26,14 +26,14 @@ export default buildModule("FxProtocol", (m) => {
     id: "FxUSDBasePoolProxy",
   });
   // deploy or get FxUSDProxy
+  const fxUSDProxyParam = m.getParameter("FxUSDProxy", ZeroAddress);
   let FxUSDProxy;
-  FxUSDProxy = m.contractAt("TransparentUpgradeableProxy", m.getParameter("FxUSDProxy", ZeroAddress), {
-    id: "FxUSDProxy",
-  });
-  if (FxUSDProxy.address === ZeroAddress) {
+  if (fxUSDProxyParam === ZeroAddress) {
     FxUSDProxy = m.contract("TransparentUpgradeableProxy", [EmptyContract, CustomProxyAdmin, "0x"], {
       id: "FxUSDProxy",
     });
+  } else {
+    FxUSDProxy = m.contractAt("TransparentUpgradeableProxy", fxUSDProxyParam, { id: "FxUSDProxy" });
   }
 
   // deploy ReservePool
@@ -42,7 +42,14 @@ export default buildModule("FxProtocol", (m) => {
   const RevenuePool = m.contract("RevenuePool", [m.getParameter("Treasury"), m.getParameter("Treasury"), admin]);
 
   // deploy PoolManager implementation and initialize PoolManager proxy
-  const PoolManagerImplementation = m.contract("PoolManager", [FxUSDProxy, FxUSDBasePoolProxy, PegKeeperProxy], {
+  // PoolManager constructor needs: (fxUSD, fxBASE, counterparty, configuration, whitelist)
+  const PoolManagerImplementation = m.contract("PoolManager", [
+    FxUSDProxy, 
+    FxUSDBasePoolProxy, 
+    PegKeeperProxy,
+    m.getParameter("PoolConfiguration", ZeroAddress),
+    m.getParameter("SmartWalletWhitelist", ZeroAddress)
+  ], {
     id: "PoolManagerImplementation",
   });
   const PoolManagerInitializer = m.encodeFunctionCall(PoolManagerImplementation, "initialize", [

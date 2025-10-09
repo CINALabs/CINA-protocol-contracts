@@ -51,8 +51,14 @@ const config: HardhatUserConfig = {
       accounts: [process.env.PRIVATE_KEY_HERMEZ!],
     },
     sepolia: {
-      url: "https://sepolia.gateway.tenderly.co",
+      url: process.env.SEPOLIA_RPC_URL || "https://rpc2.sepolia.org",
       chainId: 11155111,
+      accounts: testAccounts,
+      gasPrice: 3000000000, // 3gwei 进一步提高
+    },
+    arbitrum_sepolia: {
+      url: process.env.ARBITRUM_SEPOLIA_RPC_URL || "https://sepolia-rollup.arbitrum.io/rpc",
+      chainId: 421614,
       accounts: testAccounts,
     },
     phalcon: {
@@ -67,6 +73,17 @@ const config: HardhatUserConfig = {
       ignition: {
         maxPriorityFeePerGas: ethers.parseUnits("0.01", "gwei"),
       },
+    },
+    fork: {
+      url: process.env.FORK_RPC_URL || "",
+      chainId: parseInt(process.env.FORK_CHAIN_ID || "31337"),
+      accounts: testAccounts,
+      gasPrice: 3000000000,
+    },
+    localhost: {
+      url: "http://127.0.0.1:8545",
+      chainId: 31337,
+      accounts: testAccounts,
     },
   },
   typechain: {
@@ -86,11 +103,21 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: {
       mainnet: process.env.ETHERSCAN_API_KEY || "",
+      sepolia: process.env.ETHERSCAN_API_KEY || "",
+      arbitrum_sepolia: process.env.ARBISCAN_API_KEY || process.env.ETHERSCAN_API_KEY || "",
       hermez: process.env.POLYGON_SCAN_API_KEY || "",
       phalcon: process.env.PHALCON_FORK_ACCESS_KEY || "",
       tenderly: process.env.TENDERLY_ACCESS_TOKEN || "",
     },
     customChains: [
+      {
+        network: "arbitrum_sepolia",
+        chainId: 421614,
+        urls: {
+          apiURL: "https://api-sepolia.arbiscan.io/api",
+          browserURL: "https://sepolia.arbiscan.io",
+        },
+      },
       {
         network: "hermez",
         chainId: 1101,
