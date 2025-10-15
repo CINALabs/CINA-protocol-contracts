@@ -1,0 +1,8 @@
+Compiling 1 files with Solc 0.8.26
+Solc 0.8.26 finished in 315.66ms
+Error: Compiler run failed:
+Error (9582): Member "updateOpenRatio" not found or not visible after argument-dependent lookup in contract AaveFundingPool.
+   --> script/DeployComplete.s.sol:155:13:
+    |
+155 |         try aavePool.updateOpenRatio(
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^

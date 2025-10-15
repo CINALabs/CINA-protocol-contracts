@@ -7,6 +7,8 @@ import "./tasks/mock-owner";
 dotenv.config();
 
 const testAccounts = process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [];
+const mainnetAccounts = process.env.PRIVATE_KEY_MAINNET !== undefined && process.env.PRIVATE_KEY_MAINNET.length === 66 ? [process.env.PRIVATE_KEY_MAINNET] : [];
+const hermezAccounts = process.env.PRIVATE_KEY_HERMEZ !== undefined && process.env.PRIVATE_KEY_HERMEZ.length === 66 ? [process.env.PRIVATE_KEY_HERMEZ] : [];
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -39,7 +41,7 @@ const config: HardhatUserConfig = {
     mainnet: {
       url: process.env.MAINNET_RPC_URL || "https://rpc.ankr.com/eth",
       chainId: 1,
-      accounts: [process.env.PRIVATE_KEY_MAINNET!],
+      accounts: mainnetAccounts,
       ignition: {
         maxPriorityFeePerGas: ethers.parseUnits("0.01", "gwei"),
         maxFeePerGasLimit: ethers.parseUnits("100", "gwei"),
@@ -48,7 +50,7 @@ const config: HardhatUserConfig = {
     hermez: {
       url: process.env.HERMEZ_RPC_URL || "https://zkevm-rpc.com",
       chainId: 1101,
-      accounts: [process.env.PRIVATE_KEY_HERMEZ!],
+      accounts: hermezAccounts,
     },
     sepolia: {
       url: process.env.SEPOLIA_RPC_URL || "https://rpc2.sepolia.org",

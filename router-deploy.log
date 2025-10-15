@@ -1,0 +1,71 @@
+🚀 开始部署 Router 系统到 Sepolia...
+
+📍 部署账户: 0xE8055E0fAb02Ceb32D30DA3540Cf97BE1FBf244A
+💰 余额: 0.713756077829148813 ETH
+
+═══════════════════════════════════════
+1️⃣  部署 ERC2535 Facets
+═══════════════════════════════════════
+
+部署 DiamondCutFacet...
+✅ DiamondCutFacet: 0x1adb1d517f0fAd6695Ac5907CB16276FaC1C3e8B
+
+部署 DiamondLoupeFacet...
+✅ DiamondLoupeFacet: 0x28909aA9fA21e06649F0E9A0a67E7CcabAAef947
+
+部署 OwnershipFacet...
+✅ OwnershipFacet: 0xf662BA47BE8d10a9573afb2553EDA46db3854715
+
+部署 RouterManagementFacet...
+✅ RouterManagementFacet: 0xD3A63FfBE2EDa3D0E07426346189000f39fDa1C0
+
+部署 MorphoFlashLoanCallbackFacet...
+✅ MorphoFlashLoanCallbackFacet: 0x7DfE7037d407af7d5B84f0aeE56f8466ce0AC150
+
+部署 PositionOperateFlashLoanFacetV2...
+✅ PositionOperateFlashLoanFacetV2: 0x6403A2D1A99e15369A1f5C46fA2983C619D0B410
+
+部署 FxUSDBasePoolV2Facet...
+✅ FxUSDBasePoolV2Facet: 0x08aD9003331FFDbe727354711bE1E8a67646C460
+
+═══════════════════════════════════════
+2️⃣  准备 Diamond Cuts
+═══════════════════════════════════════
+
+准备了 7 个 Facet Cuts
+
+═══════════════════════════════════════
+3️⃣  部署 Diamond (Router)
+═══════════════════════════════════════
+
+✅ Diamond (Router): 0xB8B3e6C7D0f0A9754F383107A6CCEDD8F19343Ec
+
+═══════════════════════════════════════
+4️⃣  配置 Router
+═══════════════════════════════════════
+
+批准 MultiPathConverter...
+✅ 已批准 MultiPathConverter
+
+授予 Router OPERATOR_ROLE...
+✅ 已授予 Router OPERATOR_ROLE
+
+═══════════════════════════════════════
+📋 部署总结
+═══════════════════════════════════════
+
+✅ 已部署的 Facets:
+   - DiamondCutFacet                     0x1adb1d517f0fAd6695Ac5907CB16276FaC1C3e8B
+   - DiamondLoupeFacet                   0x28909aA9fA21e06649F0E9A0a67E7CcabAAef947
+   - OwnershipFacet                      0xf662BA47BE8d10a9573afb2553EDA46db3854715
+   - RouterManagementFacet               0xD3A63FfBE2EDa3D0E07426346189000f39fDa1C0
+   - MorphoFlashLoanCallbackFacet        0x7DfE7037d407af7d5B84f0aeE56f8466ce0AC150
+   - PositionOperateFlashLoanFacetV2     0x6403A2D1A99e15369A1f5C46fA2983C619D0B410
+   - FxUSDBasePoolV2Facet                0x08aD9003331FFDbe727354711bE1E8a67646C460
+
+✅ Router (Diamond): 0xB8B3e6C7D0f0A9754F383107A6CCEDD8F19343Ec
+
+📝 部署地址已保存
+
+✅ 完成!
+
