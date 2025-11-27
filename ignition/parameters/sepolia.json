@@ -1,0 +1,22 @@
+{
+  "SepoliaFxProtocol": {
+    "HarvesterRatio": "100000000",
+    "FlashLoanFeeRatio": "1000000",
+    "RewardsExpenseRatio": "200000000",
+    "FundingExpenseRatio": "200000000",
+    "LiquidationExpenseRatio": "200000000",
+    "RedeemFeeRatio": "5000000",
+    "StableDepegPrice": "990000000000000000",
+    "RedeemCoolDownPeriod": "3600"
+  },
+  "SepoliaPool": {
+    "CollateralCapacity": "1000000000000000000000",
+    "DebtCapacity": "500000000000000000000000",
+    "DebtRatioLower": "500000000000000000",
+    "DebtRatioUpper": "857142857142857142",
+    "RebalanceDebtRatio": "800000000000000000",
+    "RebalanceBonusRatio": "20000000",
+    "LiquidateDebtRatio": "950000000000000000",
+    "LiquidateBonusRatio": "40000000"
+  }
+}

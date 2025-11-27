@@ -1,0 +1,5 @@
+
+WARNING: You are using Node.js 25.2.1 which is not supported by Hardhat.
+Please upgrade to 22.10.0 or a later LTS version (even major version number)
+
+[?25l[2K[1G[36m?[39m [1mConfirm deploy to network sepolia (11155111)?[22m [90m›[39m [90m(y/N)[39m

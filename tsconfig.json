@@ -1,0 +1,25 @@
+{
+  "ts-node": {
+    "experimentalResolver": true,
+    // Do not forget to `npm i -D tsconfig-paths`
+    "require": ["tsconfig-paths/register"]
+  },
+  "compilerOptions": {
+    "lib": ["es2023"],
+    "baseUrl": ".",
+    "paths": {
+      "@/test/*": ["test/*"],
+      "@/types/*": ["src/@types/*"],
+      "@/utils/*": ["src/utils/*"]
+    },
+    "target": "es2022",
+    "module": "node16",
+    "esModuleInterop": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  }
+}

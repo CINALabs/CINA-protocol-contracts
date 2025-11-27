@@ -1,0 +1,286 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.26;
+
+import "forge-std/Script.sol";
+import "forge-std/console.sol";
+
+import "../contracts/core/PoolManager.sol";
+import "../contracts/core/FxUSDRegeneracy.sol";
+import "../contracts/core/pool/AaveFundingPool.sol";
+import "../contracts/mocks/MockERC20.sol";
+
+/**
+ * @title TestFullFlow
+ * @notice 完整的开仓、加仓、减仓、平仓流程测试
+ */
+contract TestFullFlow is Script {
+    PoolManager poolManager;
+    FxUSDRegeneracy fxUSD;
+    AaveFundingPool wstETHPool;
+    MockERC20 mockWstETH;
+    
+    address user;
+    uint256 positionId;
+    
+    function run() external {
+        // Load deployment addresses
+        string memory json = vm.readFile("./deployments/sepolia-latest.json");
+        
+        poolManager = PoolManager(vm.parseJsonAddress(json, ".PoolManager"));
+        fxUSD = FxUSDRegeneracy(vm.parseJsonAddress(json, ".FxUSD"));
+        wstETHPool = AaveFundingPool(vm.parseJsonAddress(json, ".WstETHPool"));
+        mockWstETH = MockERC20(vm.parseJsonAddress(json, ".MockWstETH"));
+        
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+        user = vm.addr(deployerPrivateKey);
+        
+        console.log("\n========================================");
+        console.log("f(x) Protocol Full Flow Test");
+        console.log("========================================");
+        console.log("User:", user);
+        console.log("PoolManager:", address(poolManager));
+        console.log("WstETH Pool:", address(wstETHPool));
+        console.log("FxUSD:", address(fxUSD));
+        console.log("MockWstETH:", address(mockWstETH));
+        
+        vm.startBroadcast(deployerPrivateKey);
+        
+        // 准备测试代币
+        prepareTokens();
+        
+        // 测试 1: 开仓
+        testOpenPosition();
+        
+        // 测试 2: 加仓（增加抵押品）
+        testAddCollateral();
+        
+        // 测试 3: 增加债务
+        testBorrowMore();
+        
+        // 测试 4: 偿还部分债务
+        testRepayDebt();
+        
+        // 测试 5: 减少抵押品
+        testReduceCollateral();
+        
+        // 测试 6: 完全平仓
+        testClosePosition();
+        
+        vm.stopBroadcast();
+        
+        console.log("\n========================================");
+        console.log("所有测试完成！");
+        console.log("========================================");
+    }
+    
+    function prepareTokens() internal {
+        console.log("\n--- Preparing Test Tokens ---");
+        
+        // Mint 20 wstETH
+        mockWstETH.mint(user, 20 ether);
+        console.log("Minted 20 wstETH");
+        
+        // Approve PoolManager
+        mockWstETH.approve(address(poolManager), type(uint256).max);
+        console.log("Approved wstETH to PoolManager");
+        
+        // Approve fxUSD (for repaying debt)
+        fxUSD.approve(address(poolManager), type(uint256).max);
+        console.log("Approved fxUSD to PoolManager");
+        
+        console.log("wstETH balance:", mockWstETH.balanceOf(user));
+    }
+    
+    function testOpenPosition() internal {
+        console.log("\n========================================");
+        console.log("测试 1: 开仓");
+        console.log("========================================");
+        
+        uint256 collateralAmount = 2 ether; // 2 wstETH
+        uint256 debtAmount = 3000 ether; // 3000 fxUSD
+        
+        console.log("存入抵押品:", collateralAmount);
+        console.log("借出债务:", debtAmount);
+        
+        // 开仓
+        poolManager.operate(
+            address(wstETHPool),
+            0, // 新仓位
+            collateralAmount,
+            debtAmount,
+            false
+        );
+        
+        positionId = 1;
+        console.log("仓位已创建，ID:", positionId);
+        
+        // 查询仓位
+        (uint256 colls, uint256 debts) = wstETHPool.getPosition(positionId);
+        console.log("当前抵押品:", colls);
+        console.log("当前债务:", debts);
+        console.log("债务率:", (debts * 1e18) / (colls * 3000)); // 假设 ETH = $3000
+        
+        // 查询余额
+        console.log("fxUSD 余额:", fxUSD.balanceOf(user));
+        console.log("wstETH 余额:", mockWstETH.balanceOf(user));
+    }
+    
+    function testAddCollateral() internal {
+        console.log("\n========================================");
+        console.log("测试 2: 加仓（增加抵押品）");
+        console.log("========================================");
+        
+        uint256 addCollateral = 1 ether; // 增加 1 wstETH
+        
+        console.log("增加抵押品:", addCollateral);
+        
+        // 查询操作前状态
+        (uint256 collsBefore, uint256 debtsBefore) = wstETHPool.getPosition(positionId);
+        console.log("操作前 - 抵押品:", collsBefore, "债务:", debtsBefore);
+        
+        // 增加抵押品（不增加债务）
+        poolManager.operate(
+            address(wstETHPool),
+            positionId,
+            addCollateral,
+            0, // 不增加债务
+            false
+        );
+        
+        // 查询操作后状态
+        (uint256 collsAfter, uint256 debtsAfter) = wstETHPool.getPosition(positionId);
+        console.log("操作后 - 抵押品:", collsAfter, "债务:", debtsAfter);
+        console.log("新债务率:", (debtsAfter * 1e18) / (collsAfter * 3000));
+    }
+    
+    function testBorrowMore() internal {
+        console.log("\n========================================");
+        console.log("测试 3: 增加债务");
+        console.log("========================================");
+        
+        uint256 borrowMore = 1000 ether; // 再借 1000 fxUSD
+        
+        console.log("增加债务:", borrowMore);
+        
+        // 查询操作前状态
+        (uint256 collsBefore, uint256 debtsBefore) = wstETHPool.getPosition(positionId);
+        uint256 fxUSDBefore = fxUSD.balanceOf(user);
+        console.log("操作前 - 抵押品:", collsBefore, "债务:", debtsBefore);
+        console.log("操作前 - fxUSD 余额:", fxUSDBefore);
+        
+        // 增加债务（不增加抵押品）
+        poolManager.operate(
+            address(wstETHPool),
+            positionId,
+            0, // 不增加抵押品
+            borrowMore,
+            false
+        );
+        
+        // 查询操作后状态
+        (uint256 collsAfter, uint256 debtsAfter) = wstETHPool.getPosition(positionId);
+        uint256 fxUSDAfter = fxUSD.balanceOf(user);
+        console.log("操作后 - 抵押品:", collsAfter, "债务:", debtsAfter);
+        console.log("操作后 - fxUSD 余额:", fxUSDAfter);
+        console.log("新债务率:", (debtsAfter * 1e18) / (collsAfter * 3000));
+    }
+    
+    function testRepayDebt() internal {
+        console.log("\n========================================");
+        console.log("测试 4: 偿还部分债务");
+        console.log("========================================");
+        
+        uint256 repayAmount = 500 ether; // 偿还 500 fxUSD
+        
+        console.log("偿还债务:", repayAmount);
+        
+        // 查询操作前状态
+        (uint256 collsBefore, uint256 debtsBefore) = wstETHPool.getPosition(positionId);
+        uint256 fxUSDBefore = fxUSD.balanceOf(user);
+        console.log("操作前 - 抵押品:", collsBefore, "债务:", debtsBefore);
+        console.log("操作前 - fxUSD 余额:", fxUSDBefore);
+        
+        // 偿还债务（负数表示减少债务）
+        poolManager.operate(
+            address(wstETHPool),
+            positionId,
+            0, // 不改变抵押品
+            -int256(repayAmount), // 负数表示偿还
+            false
+        );
+        
+        // 查询操作后状态
+        (uint256 collsAfter, uint256 debtsAfter) = wstETHPool.getPosition(positionId);
+        uint256 fxUSDAfter = fxUSD.balanceOf(user);
+        console.log("操作后 - 抵押品:", collsAfter, "债务:", debtsAfter);
+        console.log("操作后 - fxUSD 余额:", fxUSDAfter);
+        console.log("新债务率:", (debtsAfter * 1e18) / (collsAfter * 3000));
+    }
+    
+    function testReduceCollateral() internal {
+        console.log("\n========================================");
+        console.log("测试 5: 减少抵押品");
+        console.log("========================================");
+        
+        uint256 reduceAmount = 0.5 ether; // 取出 0.5 wstETH
+        
+        console.log("减少抵押品:", reduceAmount);
+        
+        // 查询操作前状态
+        (uint256 collsBefore, uint256 debtsBefore) = wstETHPool.getPosition(positionId);
+        uint256 wstETHBefore = mockWstETH.balanceOf(user);
+        console.log("操作前 - 抵押品:", collsBefore, "债务:", debtsBefore);
+        console.log("操作前 - wstETH 余额:", wstETHBefore);
+        
+        // 减少抵押品（负数表示取出）
+        poolManager.operate(
+            address(wstETHPool),
+            positionId,
+            -int256(reduceAmount), // 负数表示取出
+            0, // 不改变债务
+            false
+        );
+        
+        // 查询操作后状态
+        (uint256 collsAfter, uint256 debtsAfter) = wstETHPool.getPosition(positionId);
+        uint256 wstETHAfter = mockWstETH.balanceOf(user);
+        console.log("操作后 - 抵押品:", collsAfter, "债务:", debtsAfter);
+        console.log("操作后 - wstETH 余额:", wstETHAfter);
+        console.log("新债务率:", (debtsAfter * 1e18) / (collsAfter * 3000));
+    }
+    
+    function testClosePosition() internal {
+        console.log("\n========================================");
+        console.log("测试 6: 完全平仓");
+        console.log("========================================");
+        
+        // 查询当前仓位
+        (uint256 colls, uint256 debts) = wstETHPool.getPosition(positionId);
+        console.log("当前抵押品:", colls);
+        console.log("当前债务:", debts);
+        
+        uint256 wstETHBefore = mockWstETH.balanceOf(user);
+        uint256 fxUSDBefore = fxUSD.balanceOf(user);
+        console.log("操作前 - wstETH 余额:", wstETHBefore);
+        console.log("操作前 - fxUSD 余额:", fxUSDBefore);
+        
+        // 完全平仓（取出所有抵押品，偿还所有债务）
+        poolManager.operate(
+            address(wstETHPool),
+            positionId,
+            -int256(colls), // 取出所有抵押品
+            -int256(debts), // 偿还所有债务
+            false
+        );
+        
+        console.log("仓位已平仓");
+        
+        // 查询操作后状态
+        (uint256 collsAfter, uint256 debtsAfter) = wstETHPool.getPosition(positionId);
+        uint256 wstETHAfter = mockWstETH.balanceOf(user);
+        uint256 fxUSDAfter = fxUSD.balanceOf(user);
+        console.log("操作后 - 抵押品:", collsAfter, "债务:", debtsAfter);
+        console.log("操作后 - wstETH 余额:", wstETHAfter);
+        console.log("操作后 - fxUSD 余额:", fxUSDAfter);
+    }
+}
